@@ -5,4 +5,7 @@ d = { 'settings': { 'branch': 'master',
                 'doc_host': 'https://enveda.github.io',
                 'git_url': 'https://github.com/enveda/nbdev-demo',
                 'lib_path': 'nbdev_demo'},
-  'syms': {'nbdev_demo.core': {'nbdev_demo.core.mass_error_ppm': ('core.html#mass_error_ppm', 'nbdev_demo/core.py')}}}
+  'syms': { 'nbdev_demo.core': { 'nbdev_demo.core.HelloElement': ('core.html#helloelement', 'nbdev_demo/core.py'),
+                                 'nbdev_demo.core.HelloElement.__init__': ('core.html#__init__', 'nbdev_demo/core.py'),
+                                 'nbdev_demo.core.HelloElement.fun_fact': ('core.html#fun_fact', 'nbdev_demo/core.py'),
+                                 'nbdev_demo.core.mass_error_ppm': ('core.html#mass_error_ppm', 'nbdev_demo/core.py')}}}
