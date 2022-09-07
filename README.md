@@ -17,7 +17,8 @@ pip install nbdev_demo
 Fill me in please! Don’t forget code examples:
 
 ``` python
-1+1
+from nbdev_demo.core import *
+mass_error_ppm(123.1234, 123.1230)
 ```
 
-    2
+    -3.25
