@@ -35,3 +35,12 @@ div.description {
   font-size: 135%;
   opacity: 70%;
 }
+
+#quarto-document-content {
+  width: 120%;
+}
+
+#quarto-margin-sidebar {
+  margin-right: -200px;
+  margin-left: 200px;
+}
