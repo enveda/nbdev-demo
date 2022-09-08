@@ -1,0 +1,65 @@
+[
+  {
+    "objectID": "index.html",
+    "href": "index.html",
+    "title": "nbdev-demo",
+    "section": "",
+    "text": "This file will become your README and also the index of your documentation."
+  },
+  {
+    "objectID": "index.html#install",
+    "href": "index.html#install",
+    "title": "nbdev-demo",
+    "section": "Install",
+    "text": "Install\npip install nbdev_demo"
+  },
+  {
+    "objectID": "index.html#how-to-use",
+    "href": "index.html#how-to-use",
+    "title": "nbdev-demo",
+    "section": "How to use",
+    "text": "How to use\nFill me in please! Don’t forget code examples:\n\nfrom nbdev_demo.core import *\n\n\nmass_error_ppm(123.1234, 123.1230)\n\n-3.25\n\n\n\nhi_el = HelloElement('Pt')\nhi_el.fun_fact()\n\n'Attractive greyish-white metal. When pure, it is malleable and ductile. Does not oxidize in air, insoluble in hydrochloric and nitric acid. Corroded by halogens, cyandies, sulphur and alkalis. Hydrogen and Oxygen react explosively in the presence of platinumpy. There are six stable isotopes and three radioisotopes, the most stable being Pt-193 with a half-life of 60 years. Platinum is used in jewelry, laboratory equipment, electrical contacts, dentistry, and anti-pollution devices in cars. PtCl2(NH3)2 is used to treat some forms of cancer. Platinum-Cobalt alloys have magnetic properties. It is also used in the definition of the Standard Hydrogen Electrode. Discovered by Antonio de Ulloa in South America in 1735. The name comes from the Spanish word platina which means silver. Platinum metal is generally not a health concern due to its unreactivity, however platinum compounds should be considered highly toxic.'"
+  },
+  {
+    "objectID": "01_panel_charts.html",
+    "href": "01_panel_charts.html",
+    "title": "Some interactive charts",
+    "section": "",
+    "text": "# from bokeh.sampledata.periodic_table import elements\nimport altair as alt\nimport pandas as pd\nimport panel as pn\nimport param"
+  },
+  {
+    "objectID": "01_panel_charts.html#panel-widget",
+    "href": "01_panel_charts.html#panel-widget",
+    "title": "Some interactive charts",
+    "section": "Panel Widget",
+    "text": "Panel Widget\nMust use widget.embed().\n\nslider = pn.widgets.IntSlider(start=0, end=10)\n\n@pn.depends(slider.param.value)\ndef callback(value):\n    return '%d * 5 = %d' % (value, value*5)\n\nwidget1 = pn.Row(slider, callback)\nwidget1\n\n\n\n\n\n  \n\n\n\n\n\nwidget1.embed(states={slider: [i for i in range(11)]})"
+  },
+  {
+    "objectID": "01_panel_charts.html#panel-altair",
+    "href": "01_panel_charts.html#panel-altair",
+    "title": "Some interactive charts",
+    "section": "Panel & Altair",
+    "text": "Panel & Altair\n\nelements = pd.read_csv('https://raw.githubusercontent.com/bokeh/bokeh/aae3034a9df90119c3c8c71ddf7a15e41821a5d0/src/bokeh/sampledata/_data/elements.csv')\nelements.head()\n\n\n\n\n\n  \n    \n      \n      atomic number\n      symbol\n      name\n      atomic mass\n      CPK\n      electronic configuration\n      electronegativity\n      atomic radius\n      ion radius\n      van der Waals radius\n      ...\n      EA\n      standard state\n      bonding type\n      melting point\n      boiling point\n      density\n      metal\n      year discovered\n      group\n      period\n    \n  \n  \n    \n      0\n      1\n      H\n      Hydrogen\n      1.00794\n      #FFFFFF\n      1s1\n      2.20\n      37.0\n      NaN\n      120.0\n      ...\n      -73.0\n      gas\n      diatomic\n      14.0\n      20.0\n      0.00009\n      nonmetal\n      1766\n      1\n      1\n    \n    \n      1\n      2\n      He\n      Helium\n      4.002602\n      #D9FFFF\n      1s2\n      NaN\n      32.0\n      NaN\n      140.0\n      ...\n      0.0\n      gas\n      atomic\n      NaN\n      4.0\n      0.00000\n      noble gas\n      1868\n      18\n      1\n    \n    \n      2\n      3\n      Li\n      Lithium\n      6.941\n      #CC80FF\n      [He] 2s1\n      0.98\n      134.0\n      76 (+1)\n      182.0\n      ...\n      -60.0\n      solid\n      metallic\n      454.0\n      1615.0\n      0.54000\n      alkali metal\n      1817\n      1\n      2\n    \n    \n      3\n      4\n      Be\n      Beryllium\n      9.012182\n      #C2FF00\n      [He] 2s2\n      1.57\n      90.0\n      45 (+2)\n      NaN\n      ...\n      0.0\n      solid\n      metallic\n      1560.0\n      2743.0\n      1.85000\n      alkaline earth metal\n      1798\n      2\n      2\n    \n    \n      4\n      5\n      B\n      Boron\n      10.811\n      #FFB5B5\n      [He] 2s2 2p1\n      2.04\n      82.0\n      27 (+3)\n      NaN\n      ...\n      -27.0\n      solid\n      covalent network\n      2348.0\n      4273.0\n      2.46000\n      metalloid\n      1807\n      13\n      2\n    \n  \n\n5 rows × 21 columns\n\n\n\n\nclass PeriodSelector(param.Parameterized):\n    slider = param.Integer(6, bounds=(1, 6), step=1)\n    \n    @param.depends('slider', watch=True)\n    def _update_data(self):\n        return elements.query(f\"period == {self.slider}\").copy()\n    \n    def view(self):\n        data = self._update_data()\n        chart = (\n            alt.Chart(data, title=f\"period {self.slider} elements\")\n            .mark_point()\n            .encode(\n                x=alt.X('symbol:N', sort=data.symbol.to_numpy()),\n                y='electronegativity',\n                tooltip=['symbol','atomic mass']\n            )\n            .properties(width=400, height=200)\n        )\n        return chart\n\nperiod_selector = PeriodSelector(name='Periodic Trends in Electronegativity')\nwidget2 = pn.Column(period_selector.param, period_selector.view)\nwidget2\n\n\n\n\n\n  \n\n\n\n\n\nwidget2.embed(states={widget2[0][1]: list(range(1, 7))})"
+  },
+  {
+    "objectID": "core.html",
+    "href": "core.html",
+    "title": "Demo of coding with nbdev",
+    "section": "",
+    "text": "source\n\n\n\n HelloElement (element:str)\n\nMeet the element!\n\nHelloElement('Li').fun_fact()\n\n'Socket silvery metal. First member of group 1 of the periodic table. Lithium salts are used in psychomedicine.'"
+  },
+  {
+    "objectID": "core.html#calculate-relative-mass-errors",
+    "href": "core.html#calculate-relative-mass-errors",
+    "title": "Demo of coding with nbdev",
+    "section": "Calculate Relative Mass Errors",
+    "text": "Calculate Relative Mass Errors\n\nsource\n\nmass_error_ppm\n\n mass_error_ppm (theor:float, obsvd:float)\n\nCalculate relative mass error.\n\nmass_error_ppm(123.1234, 123.1230)\n\n-3.25"
+  },
+  {
+    "objectID": "core.html#plot-some-plots",
+    "href": "core.html#plot-some-plots",
+    "title": "Demo of coding with nbdev",
+    "section": "Plot some plots",
+    "text": "Plot some plots\n\nfrom bokeh.plotting import figure, show, output_notebook\nfrom bokeh.sampledata.periodic_table import elements\nfrom bokeh.transform import dodge, factor_cmap\n\n\noutput_notebook()\n\n\n        \n        Loading BokehJS ...\n    \n\n\n\n\n\n\n\nInteractive Bokeh\n\nperiods = [\"I\", \"II\", \"III\", \"IV\", \"V\", \"VI\", \"VII\"]\ngroups = [str(x) for x in range(1, 19)]\n\ndf = elements.copy()\ndf[\"atomic mass\"] = df[\"atomic mass\"].astype(str)\ndf[\"group\"] = df[\"group\"].astype(str)\ndf[\"period\"] = [periods[x-1] for x in df.period]\ndf = df[df.group != \"-\"]\ndf = df[df.symbol != \"Lr\"]\ndf = df[df.symbol != \"Lu\"]\n\ncmap = {\n    \"alkali metal\"         : \"#a6cee3\",\n    \"alkaline earth metal\" : \"#1f78b4\",\n    \"metal\"                : \"#d93b43\",\n    \"halogen\"              : \"#999d9a\",\n    \"metalloid\"            : \"#e08d49\",\n    \"noble gas\"            : \"#eaeaea\",\n    \"nonmetal\"             : \"#f1d4Af\",\n    \"transition metal\"     : \"#599d7A\",\n}\n\nTOOLTIPS = [\n    (\"Name\", \"@name\"),\n    (\"Atomic number\", \"@{atomic number}\"),\n    (\"Atomic mass\", \"@{atomic mass}\"),\n    (\"Type\", \"@metal\"),\n    (\"CPK color\", \"$color[hex, swatch]:CPK\"),\n    (\"Electronic configuration\", \"@{electronic configuration}\"),\n]\n\np = figure(title=\"Periodic Table (omitting LA and AC Series)\", width=1000, height=450,\n           x_range=groups, y_range=list(reversed(periods)),\n           tools=\"hover\", toolbar_location=None, tooltips=TOOLTIPS)\n\nr = p.rect(\"group\", \"period\", 0.95, 0.95, source=df, fill_alpha=0.6, legend_field=\"metal\",\n           color=factor_cmap('metal', palette=list(cmap.values()), factors=list(cmap.keys())))\n\ntext_props = dict(source=df, text_align=\"left\", text_baseline=\"middle\")\n\nx = dodge(\"group\", -0.4, range=p.x_range)\n\np.text(x=x, y=\"period\", text=\"symbol\", text_font_style=\"bold\", **text_props)\n\np.text(x=x, y=dodge(\"period\", 0.3, range=p.y_range), text=\"atomic number\",\n       text_font_size=\"11px\", **text_props)\n\np.text(x=x, y=dodge(\"period\", -0.35, range=p.y_range), text=\"name\",\n       text_font_size=\"7px\", **text_props)\n\np.text(x=x, y=dodge(\"period\", -0.2, range=p.y_range), text=\"atomic mass\",\n       text_font_size=\"7px\", **text_props)\n\np.text(x=[\"3\", \"3\"], y=[\"VI\", \"VII\"], text=[\"LA\", \"AC\"], text_align=\"center\", text_baseline=\"middle\")\n\np.outline_line_color = None\np.grid.grid_line_color = None\np.axis.axis_line_color = None\np.axis.major_tick_line_color = None\np.axis.major_label_standoff = 0\np.legend.orientation = \"horizontal\"\np.legend.location =\"top_center\"\np.hover.renderers = [r] # only hover element boxes\n\nshow(p)\n\n\n  \n\n\n\n\n\n\n\n\nStatic Altair\n\nimport altair as alt\n\n\nperiod = 4\ncertain_elements = elements.query(f\"period == {period}\")\nalt.Chart(certain_elements, title=f\"period {period} elements\").mark_point().encode(\n    x=alt.X('symbol:N', sort=certain_elements.symbol.to_numpy()),\n    y='electronegativity',\n)\n\n\n\n\n\n\n\n\nInteractive Altair\n\nslider = alt.binding_range(min=1, max=6, step=1, name='period:')\nselector = alt.selection_single(fields=['period'], bind=slider, init={'period': 3})\n\nchart = (\n    alt.Chart(elements, title=f\"Select the period below to filter elements\").mark_point()\n    .encode(\n        x=alt.X('symbol:N', sort=elements.symbol.to_numpy()),\n        y='electronegativity',\n        tooltip=['symbol','atomic number','atomic mass']\n    )\n    .add_selection(selector)\n    .transform_filter(selector)\n    .properties(width=400, height=200)\n    .interactive()\n)\nchart"
+  }
+]
